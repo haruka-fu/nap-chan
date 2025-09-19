@@ -1,6 +1,8 @@
+import 'dotenv/config';
 import { Client, GatewayIntentBits } from 'discord.js';
 import { getMessageCreateEvent } from './events';
-import 'dotenv/config';
+import { deployCommands } from './setupCommands';
+import { callPingPong } from './commands/ping';
 
 const token = process.env.DISCORD_TOKEN;
 if (!token) {
@@ -20,7 +22,12 @@ client.once('clientReady', () => {
         throw new Error('Client user is not defined.');
     }
     console.log(`${client.user.username} が起動しました`);
+    deployCommands(client.user.id);
 });
 
+// イベントリスナーの設定
 getMessageCreateEvent(client);
+callPingPong(client);
+
+// ログイン処理
 client.login(token);
