@@ -1,3 +1,8 @@
+/**
+ * ボイスチャンネルの接続状態を確認するコマンド。
+ * - 現在の接続状態と設定を表示します。
+ */
+
 import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
 import { getConnection } from '../voiceConnectionManager';
 import { VoiceConnectionStatus } from '@discordjs/voice';

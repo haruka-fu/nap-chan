@@ -1,3 +1,8 @@
+/**
+ * TTS キューをクリアするコマンド。
+ * - 現在の再生を停止し、キュー内のすべてのアイテムを削除します。
+ */
+
 import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
 import { ttsQueue } from '../ttsQueue';
 

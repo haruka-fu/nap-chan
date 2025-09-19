@@ -1,3 +1,10 @@
+/**
+ * Discord ボットのエントリーポイント。
+ * - クライアントの初期化
+ * - コマンドとイベントの登録
+ * - トークンを使用してログイン
+ */
+
 import 'dotenv/config';
 import { Client as DiscordClient, GatewayIntentBits, Collection, Interaction, ChatInputCommandInteraction } from 'discord.js';
 import { loadCommands } from './setupCommands';

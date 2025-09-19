@@ -1,5 +1,10 @@
 import { VoiceConnection } from '@discordjs/voice';
 
+/**
+ * ボイスチャンネル接続の管理モジュール。
+ * - 接続の設定、取得、クリア
+ */
+
 let connection: VoiceConnection | null = null;
 
 export function setConnection(conn: VoiceConnection) {

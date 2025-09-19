@@ -1,3 +1,10 @@
+/**
+ * TTS (Text-to-Speech) キューを管理するクラス。
+ * - キューへの追加、削除
+ * - 再生管理
+ * - 一時ファイルのクリーンアップ
+ */
+
 import { createAudioPlayer, createAudioResource, AudioPlayerStatus, AudioPlayerError } from '@discordjs/voice';
 import fs from 'fs';
 

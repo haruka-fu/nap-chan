@@ -1,3 +1,9 @@
+/**
+ * コマンドの読み込みと Discord API への登録を行うモジュール。
+ * - コマンドファイルをスキャンして登録
+ * - 既存のコマンドを削除して新しいコマンドを登録
+ */
+
 import { REST, Routes } from 'discord.js';
 import { readdirSync } from 'fs';
 import { join } from 'path';

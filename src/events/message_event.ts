@@ -1,8 +1,15 @@
+/**
+ * メッセージイベントの処理。
+ * - ユーザーのメッセージを監視し、TTS キューに追加します。
+ * - VoiceVox を使用して音声ファイルを生成します。
+ */
+
 import { Message } from 'discord.js';
 import { getConnection } from '../voiceConnectionManager';
 import { ttsQueue } from '../ttsQueue';
 import fs from 'fs';
 import { VoiceConnectionStatus } from '@discordjs/voice';
+import { monitorVoiceConnection } from '../utils/voiceConnectionMonitor';
 
 export const name = 'messageCreate';
 export const once = false;
@@ -21,13 +28,7 @@ export async function execute(message: Message) {
     const connection = getConnection();
     if (!connection) return;
 
-    // VC切断時にキューをクリア
-    if (!connection.listenerCount(VoiceConnectionStatus.Disconnected)) {
-        connection.on(VoiceConnectionStatus.Disconnected, () => {
-            console.log('[TTS] VC切断検知、キューをクリアします');
-            ttsQueue.clear();
-        });
-    }
+    monitorVoiceConnection(connection);
 
     try {
         const text = message.content;

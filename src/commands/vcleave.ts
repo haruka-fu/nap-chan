@@ -1,3 +1,8 @@
+/**
+ * ボイスチャンネルから退出するコマンド。
+ * - 現在の接続を破棄し、リソースを解放します。
+ */
+
 import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
 import { getConnection, clearConnection } from '../voiceConnectionManager';
 
