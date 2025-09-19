@@ -61,14 +61,19 @@ export const CommandData = {
                         entersState(connection, VoiceConnectionStatus.Signalling, 5_000),
                         entersState(connection, VoiceConnectionStatus.Connecting, 5_000),
                     ]);
+                    console.log('再接続に成功しました');
                 } catch (error) {
-                    console.log('再接続に失敗しました:', error);
-                    connection.destroy();
+                    console.error('再接続に失敗しました:', error);
+                    connection.destroy(); // リソースを解放
                 }
             });
 
             connection.on('error', (error) => {
                 console.error('ボイスチャンネル接続エラー:', error);
+                if (error.code === 'ERR_SOCKET_DGRAM_NOT_RUNNING') {
+                    console.log('UDPソケットが停止しています。接続を再試行します。');
+                    connection.destroy(); // リソースを解放
+                }
             });
 
             setConnection(connection);

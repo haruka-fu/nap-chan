@@ -13,4 +13,6 @@ services:
     container_name: voicevox
     ports:
       - "50021:50021"
+    environment:
+      LOG_LEVEL: warn
     restart: unless-stopped
