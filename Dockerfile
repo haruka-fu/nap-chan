@@ -16,8 +16,5 @@ COPY tsconfig.json ./
 # TypeScriptをJavaScriptにコンパイル
 RUN npx tsc && ls -l dist
 
-# コマンドのセットアップを実行
-RUN node dist/setupCommands.js
-
 # ボットを起動
 CMD ["node", "dist/main.js"]
