@@ -1,4 +1,5 @@
 import { Client, GatewayIntentBits } from 'discord.js';
+import { getMessageCreateEvent } from './events';
 import 'dotenv/config';
 
 const token = process.env.DISCORD_TOKEN;
@@ -15,16 +16,11 @@ const client = new Client({
 });
 
 client.once('clientReady', () => {
-    console.log(`Logged in as ${client.user?.tag}!`);
-});
-
-// ping-pong 応答
-client.on('messageCreate', (message) => {
-    console.log(message.content);
-    if (message.author.bot) return;
-    if (message.content === 'ping') {
-        message.reply('pong');
+    if (!client.user) {
+        throw new Error('Client user is not defined.');
     }
+    console.log(`${client.user.username} が起動しました`);
 });
 
+getMessageCreateEvent(client);
 client.login(token);
