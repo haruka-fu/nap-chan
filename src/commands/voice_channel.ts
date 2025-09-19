@@ -1,5 +1,6 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, GuildMember } from 'discord.js';
 import { joinVoiceChannel } from '@discordjs/voice';
+import { setConnection } from '../voiceConnectionManager';
 
 export const CommandData = {
     data: new SlashCommandBuilder()
@@ -21,12 +22,12 @@ export const CommandData = {
         }
 
         try {
-            joinVoiceChannel({
+            const connection = joinVoiceChannel({
                 channelId: voiceChannel.id,
                 guildId: voiceChannel.guild.id,
                 adapterCreator: voiceChannel.guild.voiceAdapterCreator,
             });
-
+            setConnection(connection);
             await interaction.reply({ content: `ボイスチャンネル「${voiceChannel.name}」に参加しました！` });
         } catch (error) {
             console.error('Error joining voice channel:', error);
