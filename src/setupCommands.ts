@@ -2,27 +2,30 @@ import { REST, Routes } from 'discord.js';
 import { readdirSync } from 'fs';
 import { join } from 'path';
 
-const commandsPath = join(__dirname, 'commands');
-const commandFiles = readdirSync(commandsPath).filter(file => file.endsWith('.ts') || file.endsWith('.js'));
 
-const Commands: any[] = [];
-for (const file of commandFiles) {
-    try {
-        const command = require(join(commandsPath, file));
-        if (command && command.CommandData && command.CommandData.data && command.CommandData.execute) {
-            Commands.push(command.CommandData.data.toJSON());
-            console.log(`コマンド ${command.CommandData.data.name} が登録されました。`);
-        } else {
-            console.warn(`コマンドファイル ${file} は正しい形式ではありません。`);
+export function loadCommands() {
+    const commandsPath = join(__dirname, 'commands');
+    const commandFiles = readdirSync(commandsPath).filter(file => file.endsWith('.ts') || file.endsWith('.js'));
+    const commands: any[] = [];
+    for (const file of commandFiles) {
+        try {
+            const command = require(join(commandsPath, file));
+            if (command && command.CommandData && command.CommandData.data && command.CommandData.execute) {
+                commands.push(command.CommandData);
+                console.log(`コマンド ${command.CommandData.data.name} が登録されました。`);
+            } else {
+                console.warn(`コマンドファイル ${file} は正しい形式ではありません。`);
+            }
+        } catch (error) {
+            console.error(`コマンドファイル ${file} の読み込み中にエラーが発生しました:`, error);
         }
-    } catch (error) {
-        console.error(`コマンドファイル ${file} の読み込み中にエラーが発生しました:`, error);
     }
+    return commands;
 }
 
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN!);
 
-export async function setupCommands(clientId: string) {
+export async function setupCommands(clientId: string, commands: any[]) {
     try {
         console.log(`コマンドのセットアップを開始します...`);
 
@@ -35,11 +38,12 @@ export async function setupCommands(clientId: string) {
         }
 
         // 新しいコマンドを登録
-        await rest.put(Routes.applicationCommands(clientId), { body: Commands });
+        // Discord API用にtoJSONした配列を送信
+        await rest.put(Routes.applicationCommands(clientId), { body: commands.map(cmd => cmd.data.toJSON()) });
 
         console.log(`登録されたコマンド:`);
-        for (const command of Commands) {
-            console.log(`- ${command.name}`);
+        for (const command of commands) {
+            console.log(`- ${command.data.name}`);
         }
 
         console.log(`コマンドのセットアップが完了しました。`);

@@ -1,5 +1,17 @@
 FROM node:22-slim
 
+# システムパッケージの更新とFFmpegのインストール
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    python3 \
+    make \
+    g++ \
+    libtool \
+    autoconf \
+    pkg-config \
+    libsodium-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 # コンテナ内の作業ディレクトリを設定
 WORKDIR /usr/src/app
 

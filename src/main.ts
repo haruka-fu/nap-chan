@@ -1,7 +1,8 @@
 import 'dotenv/config';
 import { Client as DiscordClient, GatewayIntentBits, Collection, Interaction, ChatInputCommandInteraction } from 'discord.js';
-import { readdirSync } from 'fs';
+import { loadCommands } from './setupCommands';
 import { join } from 'path';
+import { readdirSync } from 'fs';
 import { Command } from './types';
 import { setupCommands } from './setupCommands';
 
@@ -24,25 +25,16 @@ const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildVoiceStates
     ]
 });
 
-// コマンドの自動登録
-const commandsPath = join(__dirname, 'commands');
-const commandFiles = readdirSync(commandsPath).filter(file => file.endsWith('.ts') || file.endsWith('.js'));
 
-for (const file of commandFiles) {
-    try {
-        const command = require(join(commandsPath, file));
-        if (command && command.CommandData && command.CommandData.data && command.CommandData.execute) {
-            client.commands.set(command.CommandData.data.name, command.CommandData);
-        } else {
-            console.warn(`コマンドファイル ${file} は正しい形式ではありません。`);
-        }
-    } catch (error) {
-        console.error(`コマンドファイル ${file} の読み込み中にエラーが発生しました:`, error);
-    }
+// コマンドの自動登録（loadCommandsで一元管理）
+const commands = loadCommands();
+for (const command of commands) {
+    client.commands.set(command.data.name, command);
 }
 
 client.once('clientReady', async () => {
@@ -51,8 +43,8 @@ client.once('clientReady', async () => {
     }
     console.log(`${client.user.username} が起動しました`);
 
-    // setupCommandsを呼び出してコマンドを登録
-    await setupCommands(client.user.id);
+    // setupCommandsを呼び出してコマンドを登録（既に読み込んだコマンドを渡す）
+    await setupCommands(client.user.id, commands);
 });
 
 client.on('interactionCreate', async (interaction) => {

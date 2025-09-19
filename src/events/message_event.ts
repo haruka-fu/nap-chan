@@ -1,7 +1,6 @@
 import { Message } from 'discord.js';
 import { getConnection } from '../voiceConnectionManager';
 import { createAudioPlayer, createAudioResource, AudioPlayerStatus } from '@discordjs/voice';
-import fetch from 'node-fetch';
 import fs from 'fs';
 
 export const name = 'messageCreate';
@@ -14,14 +13,15 @@ export async function execute(message: Message) {
 
     // VOICEVOX APIで音声生成
     const text = message.content;
-    const audioQuery = await fetch('http://localhost:50021/audio_query?text=' + encodeURIComponent(text) + '&speaker=1', { method: 'POST' });
+    console.log(text);
+    const audioQuery = await fetch('http://voicevox:50021/audio_query?text=' + encodeURIComponent(text) + '&speaker=1', { method: 'POST' });
     const queryJson = await audioQuery.json();
-    const audioRes = await fetch('http://localhost:50021/synthesis?speaker=1', {
+    const audioRes = await fetch('http://voicevox:50021/synthesis?speaker=1', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(queryJson),
     });
-    const buffer = await audioRes.buffer();
+    const buffer = Buffer.from(await audioRes.arrayBuffer());
     const filePath = './tmp_voice.wav';
     fs.writeFileSync(filePath, buffer);
 

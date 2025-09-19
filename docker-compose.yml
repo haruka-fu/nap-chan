@@ -3,3 +3,14 @@ services:
     build: .
     environment:
       - DISCORD_TOKEN=${DISCORD_TOKEN}
+    depends_on:
+      - voicevox
+    volumes:
+      - .:/app
+    restart: unless-stopped
+  voicevox:
+    image: voicevox/voicevox_engine:cpu-ubuntu20.04-latest
+    container_name: voicevox
+    ports:
+      - "50021:50021"
+    restart: unless-stopped
