@@ -1,0 +1,5 @@
+services:
+  nap-chan:
+    build: .
+    environment:
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
