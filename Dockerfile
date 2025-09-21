@@ -10,7 +10,13 @@ RUN apt-get update && apt-get install -y \
     autoconf \
     pkg-config \
     libsodium-dev \
+    tzdata \
     && rm -rf /var/lib/apt/lists/*
+
+# タイムゾーンの設定
+RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
+    && echo "Asia/Tokyo" > /etc/timezone \
+    && dpkg-reconfigure -f noninteractive tzdata
 
 # コンテナ内の作業ディレクトリを設定
 WORKDIR /usr/src/app

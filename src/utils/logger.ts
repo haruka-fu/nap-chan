@@ -9,7 +9,7 @@ const currentDate = format(new Date(), 'yyyy-MM-dd');
 const logger = winston.createLogger({
     level: 'info',
     format: winston.format.combine(
-        winston.format.timestamp(),
+        winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), // 日本時間の24時間表記にフォーマット
         winston.format.printf((info: TransformableInfo) => {
             const { timestamp, level, message } = info;
             return `${timestamp || ''} [${level.toUpperCase()}]: ${message}`;
