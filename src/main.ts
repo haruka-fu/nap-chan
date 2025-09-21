@@ -48,7 +48,7 @@ client.once('clientReady', async () => {
     if (!client.user) {
         throw new Error('Client user is not defined.');
     }
-    console.log(`${client.user.username} が起動しました`);
+    console.log(`[System] ${client.user.username} が起動しました`);
 
     // setupCommandsを呼び出してコマンドを登録（既に読み込んだコマンドを渡す）
     await setupCommands(client.user.id, commands);
@@ -59,14 +59,14 @@ client.on('interactionCreate', async (interaction) => {
 
     const command = client.commands.get(interaction.commandName);
     if (!command) {
-        console.error(`コマンド ${interaction.commandName} が見つかりません。`);
+        console.error(`[Error] コマンド ${interaction.commandName} が見つかりません。`);
         return;
     }
 
     try {
         await command.execute(interaction as ChatInputCommandInteraction);
     } catch (error) {
-        console.error(`コマンド ${interaction.commandName} の実行中にエラーが発生しました:`, error);
+        console.error(`[Error] コマンド ${interaction.commandName} の実行中にエラーが発生しました:`, error);
         await interaction.reply({ content: 'コマンドの実行中にエラーが発生しました。', ephemeral: true });
     }
 });
@@ -85,10 +85,10 @@ for (const file of eventFiles) {
                 client.on(event.name, (...args) => event.execute(...args));
             }
         } else {
-            console.warn(`イベントファイル ${file} は正しい形式ではありません。`);
+            console.warn(`[Warning] イベントファイル ${file} は正しい形式ではありません。`);
         }
     } catch (error) {
-        console.error(`イベントファイル ${file} の読み込み中にエラーが発生しました:`, error);
+        console.error(`[Error] イベントファイル ${file} の読み込み中にエラーが発生しました:`, error);
     }
 }
 

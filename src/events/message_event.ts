@@ -47,8 +47,6 @@ export async function execute(message: Message) {
         queryJson.intonationScale = voiceVoxConfig.intonationScale;
         queryJson.volumeScale = voiceVoxConfig.volumeScale;
 
-        console.log(`[TTS] Audio query成功`);
-
         const audioRes = await fetch('http://voicevox:50021/synthesis?speaker=' + voiceVoxConfig.speaker, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -56,14 +54,13 @@ export async function execute(message: Message) {
         });
 
         if (!audioRes.ok) {
-            console.error(`[TTS] Synthesis failed: ${audioRes.status}`);
+            console.error(`[Error] Synthesis failed: ${audioRes.status}`);
             return;
         }
 
         const buffer = Buffer.from(await audioRes.arrayBuffer());
         const filePath = `./tmp/voice_${Date.now()}_${Math.random().toString(36).substr(2, 9)}.wav`;
         fs.writeFileSync(filePath, buffer);
-        console.log(`[TTS] 音声ファイル生成完了: ${filePath}`);
 
         // キューに追加
         ttsQueue.add(text, filePath);
@@ -74,6 +71,6 @@ export async function execute(message: Message) {
         }
 
     } catch (error) {
-        console.error(`[TTS] 全体エラー:`, error);
+        console.error(`[Error] 全体エラー:`, error);
     }
 }

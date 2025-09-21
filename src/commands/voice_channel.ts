@@ -9,11 +9,11 @@ export const CommandData = {
         .setDescription('なっぷちゃんが VC に参加します'),
     async execute(interaction: ChatInputCommandInteraction) {
         if (!interaction.isCommand()) {
-            console.log("interaction はスラッシュコマンドではありません。");
+            console.log("[Error] interaction はスラッシュコマンドではありません。");
             return;
         }
 
-        console.log("/vcjoin が呼び出されました。");
+        console.log("[System] /vcjoin が呼び出されました。");
         const member = interaction.member as GuildMember;
         const voiceChannel = member.voice.channel;
 
@@ -22,12 +22,12 @@ export const CommandData = {
             return;
         }
 
-        console.log(`接続先ボイスチャンネル: ${voiceChannel.name} (ID: ${voiceChannel.id})`);
+        console.log(`[System] 接続先ボイスチャンネル: ${voiceChannel.name} (ID: ${voiceChannel.id})`);
 
         // 権限確認
         if (!hasVoiceChannelPermissions(voiceChannel, interaction.guild?.members.me!)) {
             await interaction.reply({
-                content: 'ボイスチャンネルに参加する権限がありません。「接続」と「発言」の権限を付与してください。',
+                content: '[Error] ボイスチャンネルに参加する権限がありません。「接続」と「発言」の権限を付与してください。',
                 ephemeral: true
             });
             return;
@@ -36,12 +36,12 @@ export const CommandData = {
         await interaction.deferReply();
 
         try {
-            console.log('ボイスチャンネルに接続中...');
+            console.log(`[System] ボイスチャンネルに接続中...`);
             const connection = await connectToVoiceChannel(voiceChannel);
             setConnection(connection);
             await interaction.editReply({ content: `ボイスチャンネル「${voiceChannel.name}」に参加しました！` });
         } catch (error) {
-            console.error('Error joining voice channel:', error);
+            console.error(`[Error] ボイスチャンネルへの接続中にエラーが発生しました:`, error);
             await interaction.editReply({ content: `ボイスチャンネルに参加できませんでした。エラー: ${error}` });
         }
     },

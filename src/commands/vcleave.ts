@@ -22,10 +22,10 @@ export const CommandData = {
         try {
             connection.destroy();
             clearConnection();
-            console.log('ボイスチャンネルから退出しました');
+            console.log('[System] ボイスチャンネルから退出しました');
             await interaction.reply({ content: 'ボイスチャンネルから退出しました。' });
         } catch (error) {
-            console.error('Error leaving voice channel:', error);
+            console.error('[Error] ボイスチャンネルからの退出中にエラーが発生しました:', error);
             await interaction.reply({ content: 'ボイスチャンネルからの退出でエラーが発生しました。', ephemeral: true });
         }
     },

@@ -21,7 +21,7 @@ export const CommandData = {
                 ephemeral: true
             });
         } catch (error) {
-            console.error('TTS clear error:', error);
+            console.error('[Error] TTS clear error:', error);
             await interaction.reply({
                 content: 'TTSキューのクリアでエラーが発生しました。',
                 ephemeral: true

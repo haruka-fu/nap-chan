@@ -20,7 +20,6 @@ class TTSQueue {
 
     add(text: string, filePath: string) {
         this.queue.push({ text, filePath });
-        console.log(`[TTS] キューに追加: "${text}" (キューサイズ: ${this.queue.length})`);
     }
 
     clear() {
@@ -62,7 +61,6 @@ class TTSQueue {
 
         this.isPlaying = true;
         const item = this.queue.shift()!;
-        console.log(`[TTS] 再生開始: "${item.text}" (残りキュー: ${this.queue.length})`);
 
         try {
             if (this.currentPlayer) {
@@ -73,11 +71,9 @@ class TTSQueue {
             const resource = createAudioResource(item.filePath);
 
             this.currentPlayer.on(AudioPlayerStatus.Playing, () => {
-                console.log(`[TTS] 再生中: "${item.text}"`);
             });
 
             this.currentPlayer.on(AudioPlayerStatus.Idle, () => {
-                console.log(`[TTS] 再生完了: "${item.text}"`);
                 this.cleanupFile(item.filePath);
 
                 setTimeout(() => {
@@ -86,7 +82,7 @@ class TTSQueue {
             });
 
             this.currentPlayer.on('error', (error: AudioPlayerError) => {
-                console.error(`[TTS] プレイヤーエラー: ${error.message}`, error);
+                console.error(`[Error] プレイヤーエラー: ${error.message}`, error);
                 this.cleanupFile(item.filePath);
 
                 setTimeout(() => {
@@ -98,7 +94,7 @@ class TTSQueue {
             this.currentPlayer.play(resource);
 
         } catch (error) {
-            console.error(`[TTS] 再生エラー: ${(error as Error).message}`, error);
+            console.error(`[Error] 再生エラー: ${(error as Error).message}`, error);
             this.cleanupFile(item.filePath);
 
             setTimeout(() => {
@@ -110,11 +106,11 @@ class TTSQueue {
     private cleanupFile(filePath: string) {
         try {
             if (fs.existsSync(filePath)) {
-                // fs.unlinkSync(filePath);
-                console.log(`[TTS] 一時ファイル削除処理実行想定: ${filePath}`);
+                fs.unlinkSync(filePath);
+                console.log(`[TTS] 一時ファイル削除処理完了: ${filePath}`);
             }
         } catch (error) {
-            console.error(`[TTS] 一時ファイル削除エラー:`, error);
+            console.error(`[Error] 一時ファイル削除エラー:`, error);
         }
     }
 }

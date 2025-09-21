@@ -31,7 +31,7 @@ export async function connectToVoiceChannel(voiceChannel: VoiceChannel): Promise
     });
 
     connection.on('error', (error) => {
-        console.error('ボイスチャンネル接続エラー:', error);
+        console.error('[Error] ボイスチャンネル接続エラー:', error);
     });
 
     return connection;
