@@ -8,7 +8,6 @@ import { Message } from 'discord.js';
 import { getConnection } from '../voiceConnectionManager';
 import { ttsQueue } from '../ttsQueue';
 import fs from 'fs';
-import { VoiceConnectionStatus } from '@discordjs/voice';
 import { monitorVoiceConnection } from '../utils/voiceConnectionMonitor';
 
 export const name = 'messageCreate';
@@ -17,7 +16,7 @@ export const once = false;
 // VoiceVox設定用変数
 const voiceVoxConfig = {
     speaker: 89, // スピーカーID
-    speedScale: 1.3, // 話すスピード
+    speedScale: 1.4, // 話すスピード
     pitchScale: 0.0, // 声の高さ
     intonationScale: 1.0, // イントネーションの強さ
     volumeScale: 1.0, // 音量
@@ -62,7 +61,7 @@ export async function execute(message: Message) {
         }
 
         const buffer = Buffer.from(await audioRes.arrayBuffer());
-        const filePath = `./tmp_voice_${Date.now()}_${Math.random().toString(36).substr(2, 9)}.wav`;
+        const filePath = `./tmp/voice_${Date.now()}_${Math.random().toString(36).substr(2, 9)}.wav`;
         fs.writeFileSync(filePath, buffer);
         console.log(`[TTS] 音声ファイル生成完了: ${filePath}`);
 

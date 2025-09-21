@@ -6,7 +6,9 @@ services:
     depends_on:
       - voicevox
     volumes:
-      - .:/app
+      - .:/usr/src/app
+      - /usr/src/app/dist
+      - ./tmp:/usr/src/app/tmp
     restart: unless-stopped
   voicevox:
     image: voicevox/voicevox_engine:cpu-ubuntu20.04-latest

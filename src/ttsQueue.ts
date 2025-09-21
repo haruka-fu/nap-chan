@@ -110,8 +110,8 @@ class TTSQueue {
     private cleanupFile(filePath: string) {
         try {
             if (fs.existsSync(filePath)) {
-                fs.unlinkSync(filePath);
-                console.log(`[TTS] 一時ファイル削除完了: ${filePath}`);
+                // fs.unlinkSync(filePath);
+                console.log(`[TTS] 一時ファイル削除処理実行想定: ${filePath}`);
             }
         } catch (error) {
             console.error(`[TTS] 一時ファイル削除エラー:`, error);
