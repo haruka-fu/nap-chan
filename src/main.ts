@@ -12,6 +12,7 @@ import { join } from 'path';
 import { readdirSync } from 'fs';
 import { Command } from './types';
 import { setupCommands } from './setupCommands';
+import logger from './utils/logger';
 
 // Clientクラスを拡張してcommandsプロパティを追加
 class Client extends DiscordClient {
@@ -37,6 +38,8 @@ const client = new Client({
     ]
 });
 
+// ロガーの初期化
+logger.info('Bot is starting...');
 
 // コマンドの自動登録（loadCommandsで一元管理）
 const commands = loadCommands();

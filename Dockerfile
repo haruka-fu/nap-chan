@@ -28,8 +28,9 @@ COPY tsconfig.json ./
 # TypeScriptをJavaScriptにコンパイル
 RUN npx tsc && ls -l dist
 
-# 一時ファイルを配置するフォルダを作成
+# フォルダを作成
 RUN mkdir -p /usr/src/app/tmp
+RUN mkdir -p /usr/src/app/logs
 
 # ボットを起動
 CMD ["node", "dist/main.js"]
