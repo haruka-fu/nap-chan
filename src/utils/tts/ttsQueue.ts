@@ -6,32 +6,31 @@
  */
 
 import { createAudioPlayer, createAudioResource, AudioPlayerStatus, AudioPlayerError } from '@discordjs/voice';
-import fs from 'fs';
-import logger from './utils/logger';
+import logger from '../logger';
+import { FileManager } from '../fileManager';
 
 interface TTSQueueItem {
     text: string;
     filePath: string;
 }
 
-class TTSQueue {
+export class TTSQueue {
     private queue: TTSQueueItem[] = [];
     private isPlaying = false;
     private currentPlayer: any = null;
+    private fileManager = new FileManager();
 
     add(text: string, filePath: string) {
         this.queue.push({ text, filePath });
     }
 
     clear() {
-        // 現在のプレイヤーを停止
         if (this.currentPlayer) {
             this.currentPlayer.stop();
         }
 
-        // キューの全ファイルを削除
         for (const item of this.queue) {
-            this.cleanupFile(item.filePath);
+            this.fileManager.cleanupFile(item.filePath);
         }
 
         this.queue = [];
@@ -71,11 +70,10 @@ class TTSQueue {
             this.currentPlayer = createAudioPlayer();
             const resource = createAudioResource(item.filePath);
 
-            this.currentPlayer.on(AudioPlayerStatus.Playing, () => {
-            });
+            this.currentPlayer.on(AudioPlayerStatus.Playing, () => { });
 
             this.currentPlayer.on(AudioPlayerStatus.Idle, () => {
-                this.cleanupFile(item.filePath);
+                this.fileManager.cleanupFile(item.filePath);
 
                 setTimeout(() => {
                     this.playNext(connection);
@@ -84,7 +82,7 @@ class TTSQueue {
 
             this.currentPlayer.on('error', (error: AudioPlayerError) => {
                 logger.error('Error', `プレイヤーエラー: ${error.message}`, error);
-                this.cleanupFile(item.filePath);
+                this.fileManager.cleanupFile(item.filePath);
 
                 setTimeout(() => {
                     this.playNext(connection);
@@ -96,25 +94,11 @@ class TTSQueue {
 
         } catch (error) {
             logger.error('Error', `再生エラー: ${(error as Error).message}`, error);
-            this.cleanupFile(item.filePath);
+            this.fileManager.cleanupFile(item.filePath);
 
             setTimeout(() => {
                 this.playNext(connection);
             }, 100);
         }
     }
-
-    private cleanupFile(filePath: string) {
-        try {
-            if (fs.existsSync(filePath)) {
-                fs.unlinkSync(filePath);
-                logger.info('TTS', `一時ファイル削除処理完了: ${filePath}`);
-            }
-        } catch (error) {
-            logger.error('Error', `一時ファイル削除エラー:`, error);
-        }
-    }
 }
-
-// シングルトンインスタンス
-export const ttsQueue = new TTSQueue();

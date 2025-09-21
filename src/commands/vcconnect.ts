@@ -1,12 +1,13 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, GuildMember, VoiceChannel } from 'discord.js';
 import { setConnection } from '../voiceConnectionManager';
 import { hasVoiceChannelPermissions } from '../utils/permissions';
-import { connectToVoiceChannel } from '../utils/voiceConnection';
 import logger from '../utils/logger';
+import { entersState, joinVoiceChannel, VoiceConnection, VoiceConnectionStatus } from '@discordjs/voice';
+import { monitorVoiceConnection } from '../utils/voiceConnectionMonitor';
 
 export const CommandData = {
     data: new SlashCommandBuilder()
-        .setName('vcjoin')
+        .setName('vcconnect')
         .setDescription('なっぷちゃんが VC に参加します'),
     async execute(interaction: ChatInputCommandInteraction) {
         if (!interaction.isCommand()) {
@@ -14,7 +15,7 @@ export const CommandData = {
             return;
         }
 
-        logger.info('System', '/vcjoin が呼び出されました。');
+        logger.info('System', '/vcconnect が呼び出されました。');
         const member = interaction.member as GuildMember;
         const voiceChannel = member.voice.channel;
 
@@ -47,3 +48,25 @@ export const CommandData = {
         }
     },
 };
+
+export async function connectToVoiceChannel(voiceChannel: VoiceChannel): Promise<VoiceConnection> {
+    const connection = joinVoiceChannel({
+        channelId: voiceChannel.id,
+        guildId: voiceChannel.guild.id,
+        adapterCreator: voiceChannel.guild.voiceAdapterCreator as any,
+        selfDeaf: false, // スピーカーミュートを解除
+        selfMute: false, // マイクミュートを解除
+    });
+
+    // 接続完了を待機
+    await entersState(connection, VoiceConnectionStatus.Ready, 30_000);
+
+    // 接続状態の監視
+    monitorVoiceConnection(connection);
+
+    connection.on('error', (error) => {
+        logger.error('Error', 'ボイスチャンネル接続エラー:', String(error));
+    });
+
+    return connection;
+}

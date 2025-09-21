@@ -1,6 +1,6 @@
 FROM node:22-slim
 
-# システムパッケージの更新とFFmpegのインストール
+# システムパッケージの更新
 RUN apt-get update && apt-get install -y \
     ffmpeg \
     python3 \

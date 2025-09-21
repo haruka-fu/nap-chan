@@ -26,7 +26,7 @@ const logger = winston.createLogger({
 function log(level: 'info' | 'warn' | 'error', context: string, message: string, error?: any) {
     const formattedMessage = `[${context}] ${message}`;
     if (error) {
-        logger[level](formattedMessage, error);
+        logger[level](formattedMessage, { error });
     } else {
         logger[level](formattedMessage);
     }

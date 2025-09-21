@@ -1,6 +1,8 @@
 import { VoiceConnection, VoiceConnectionStatus } from '@discordjs/voice';
-import { ttsQueue } from '../ttsQueue';
+import { TTSQueue } from './tts/ttsQueue';
 import logger from './logger';
+
+const ttsQueue = new TTSQueue();
 
 /**
  * VC 状態を監視し、切断時にキューをクリアします。

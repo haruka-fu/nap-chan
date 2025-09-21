@@ -4,8 +4,10 @@
  */
 
 import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
-import { ttsQueue } from '../ttsQueue';
-import logger from '../utils/logger';
+import { TTSQueue } from './ttsQueue';
+import logger from '../logger';
+
+const ttsQueue = new TTSQueue();
 
 export const CommandData = {
     data: new SlashCommandBuilder()

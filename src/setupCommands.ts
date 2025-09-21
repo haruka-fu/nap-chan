@@ -10,12 +10,13 @@ import { REST, Routes } from 'discord.js';
 import { readdirSync } from 'fs';
 import { join } from 'path';
 import logger from './utils/logger';
+import { Command } from './types';
 
 
-export function loadCommands() {
+export function loadCommands(): Command[] {
     const commandsPath = join(__dirname, 'commands');
     const commandFiles = readdirSync(commandsPath).filter(file => file.endsWith('.ts') || file.endsWith('.js'));
-    const commands: any[] = [];
+    const commands: Command[] = [];
     logger.info('Command', 'コマンドの読み込みを開始します...');
     for (const file of commandFiles) {
         try {

@@ -6,7 +6,7 @@
 
 import { Message } from 'discord.js';
 import { getConnection } from '../voiceConnectionManager';
-import { ttsQueue } from '../ttsQueue';
+import { TTSQueue } from '../utils/tts/ttsQueue';
 import fs from 'fs';
 import { monitorVoiceConnection } from '../utils/voiceConnectionMonitor';
 import logger from '../utils/logger';
@@ -23,6 +23,16 @@ const voiceVoxConfig = {
     volumeScale: 1.0, // 音量
 };
 
+async function handleFetchError(response: Response, context: string): Promise<any> {
+    if (!response.ok) {
+        logger.error(context, `Fetch failed with status: ${response.status}`);
+        throw new Error(`Fetch failed with status: ${response.status}`);
+    }
+    return response.json();
+}
+
+const ttsQueue = new TTSQueue();
+
 export async function execute(message: Message) {
     if (message.author.bot) return;
     const connection = getConnection();
@@ -35,14 +45,8 @@ export async function execute(message: Message) {
         logger.info('TTS', `処理開始: "${text}"`);
 
         const audioQuery = await fetch(`http://voicevox:50021/audio_query?text=${encodeURIComponent(text)}&speaker=${voiceVoxConfig.speaker}`, { method: 'POST' });
-        if (!audioQuery.ok) {
-            logger.error('TTS', `Audio query failed: ${audioQuery.status}`);
-            return;
-        }
+        const queryJson = await handleFetchError(audioQuery, 'TTS');
 
-        const queryJson = await audioQuery.json();
-
-        // VoiceVox設定を適用
         queryJson.speedScale = voiceVoxConfig.speedScale;
         queryJson.pitchScale = voiceVoxConfig.pitchScale;
         queryJson.intonationScale = voiceVoxConfig.intonationScale;
@@ -54,12 +58,7 @@ export async function execute(message: Message) {
             body: JSON.stringify(queryJson),
         });
 
-        if (!audioRes.ok) {
-            logger.error('Error', `Synthesis failed: ${audioRes.status}`);
-            return;
-        }
-
-        const buffer = Buffer.from(await audioRes.arrayBuffer());
+        const buffer = Buffer.from(await handleFetchError(audioRes, 'TTS'));
         const filePath = `./tmp/voice_${Date.now()}_${Math.random().toString(36).substr(2, 9)}.wav`;
         fs.writeFileSync(filePath, buffer);
 
@@ -72,6 +71,6 @@ export async function execute(message: Message) {
         }
 
     } catch (error) {
-        logger.error('Error', '全体エラー:', String(error));
+        logger.error('Error', '全体エラー:', error);
     }
 }
