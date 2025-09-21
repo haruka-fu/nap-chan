@@ -1,5 +1,7 @@
 /**
- * コマンドの読み込みと Discord API への登録を行うモジュール。
+ * コマンドの読み    const commands: any[] = [];
+    logger.info('System', `コマンドの読み込みを開始します...`);
+    for (const file of commandFiles) { Discord API への登録を行うモジュール。
  * - コマンドファイルをスキャンして登録
  * - 既存のコマンドを削除して新しいコマンドを登録
  */
@@ -7,23 +9,24 @@
 import { REST, Routes } from 'discord.js';
 import { readdirSync } from 'fs';
 import { join } from 'path';
+import logger from './utils/logger';
 
 
 export function loadCommands() {
     const commandsPath = join(__dirname, 'commands');
     const commandFiles = readdirSync(commandsPath).filter(file => file.endsWith('.ts') || file.endsWith('.js'));
     const commands: any[] = [];
-    console.log(`[System] コマンドの読み込みを開始します...`);
+    logger.info('Command', 'コマンドの読み込みを開始します...');
     for (const file of commandFiles) {
         try {
             const command = require(join(commandsPath, file));
             if (command && command.CommandData && command.CommandData.data && command.CommandData.execute) {
                 commands.push(command.CommandData);
             } else {
-                console.warn(`[Error] コマンドファイル ${file} は正しい形式ではありません。`);
+                logger.warn('Command', `コマンドファイル ${file} は正しい形式ではありません。`);
             }
         } catch (error) {
-            console.error(`[Error] コマンドファイル ${file} の読み込み中にエラーが発生しました:`, error);
+            logger.error('Command', `コマンドファイル ${file} の読み込み中にエラーが発生しました:`, error);
         }
     }
     return commands;
@@ -33,7 +36,7 @@ const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN!);
 
 export async function setupCommands(clientId: string, commands: any[]) {
     try {
-        console.log(`[System] コマンドのセットアップを開始します...`);
+        logger.info('Command', `コマンドのセットアップを開始します...`);
 
         // 既存のコマンドを取得
         const oldCommands = await rest.get(Routes.applicationCommands(clientId)) as Array<{ id: string, name: string }>;
@@ -47,18 +50,18 @@ export async function setupCommands(clientId: string, commands: any[]) {
         // Discord API用にtoJSONした配列を送信
         await rest.put(Routes.applicationCommands(clientId), { body: commands.map(cmd => cmd.data.toJSON()) });
 
-        console.log(`[System] 登録されたコマンド:`);
+        logger.info('System', `登録されたコマンド:`);
         for (const command of commands) {
-            console.log(`- ${command.data.name} が登録されました。`);
+            logger.info('Command', `- ${command.data.name} が登録されました。`);
         }
 
-        console.log(`[System] コマンドのセットアップが完了しました。`);
+        logger.info('Command', `コマンドのセットアップが完了しました。`);
     } catch (error: any) {
-        console.error(`[Error] コマンドのセットアップ中にエラーが発生しました:`);
+        logger.error('Command', `コマンドのセットアップ中にエラーが発生しました:`);
         if (error.rawError) {
-            console.error(`[Error] Discord APIエラー:`, error.rawError);
+            logger.error('Command', `Discord APIエラー:`, error.rawError);
         } else {
-            console.error(`[Error]`, error);
+            logger.error('Command', ``, error);
         }
     }
 }

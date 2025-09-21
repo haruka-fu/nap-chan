@@ -5,6 +5,7 @@
 
 import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
 import { ttsQueue } from '../ttsQueue';
+import logger from '../utils/logger';
 
 export const CommandData = {
     data: new SlashCommandBuilder()
@@ -21,7 +22,7 @@ export const CommandData = {
                 ephemeral: true
             });
         } catch (error) {
-            console.error('[Error] TTS clear error:', error);
+            logger.error('Error', 'TTS clear error:', String(error));
             await interaction.reply({
                 content: 'TTSキューのクリアでエラーが発生しました。',
                 ephemeral: true

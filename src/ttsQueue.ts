@@ -7,6 +7,7 @@
 
 import { createAudioPlayer, createAudioResource, AudioPlayerStatus, AudioPlayerError } from '@discordjs/voice';
 import fs from 'fs';
+import logger from './utils/logger';
 
 interface TTSQueueItem {
     text: string;
@@ -35,7 +36,7 @@ class TTSQueue {
 
         this.queue = [];
         this.isPlaying = false;
-        console.log(`[TTS] キューをクリアしました`);
+        logger.info('TTS', `キューをクリアしました`);
     }
 
     getSize(): number {
@@ -55,7 +56,7 @@ class TTSQueue {
     private async playNext(connection: any) {
         if (this.queue.length === 0) {
             this.isPlaying = false;
-            console.log(`[TTS] キューが空になりました`);
+            logger.info('TTS', `キューが空になりました`);
             return;
         }
 
@@ -82,7 +83,7 @@ class TTSQueue {
             });
 
             this.currentPlayer.on('error', (error: AudioPlayerError) => {
-                console.error(`[Error] プレイヤーエラー: ${error.message}`, error);
+                logger.error('Error', `プレイヤーエラー: ${error.message}`, error);
                 this.cleanupFile(item.filePath);
 
                 setTimeout(() => {
@@ -94,7 +95,7 @@ class TTSQueue {
             this.currentPlayer.play(resource);
 
         } catch (error) {
-            console.error(`[Error] 再生エラー: ${(error as Error).message}`, error);
+            logger.error('Error', `再生エラー: ${(error as Error).message}`, error);
             this.cleanupFile(item.filePath);
 
             setTimeout(() => {
@@ -107,10 +108,10 @@ class TTSQueue {
         try {
             if (fs.existsSync(filePath)) {
                 fs.unlinkSync(filePath);
-                console.log(`[TTS] 一時ファイル削除処理完了: ${filePath}`);
+                logger.info('TTS', `一時ファイル削除処理完了: ${filePath}`);
             }
         } catch (error) {
-            console.error(`[Error] 一時ファイル削除エラー:`, error);
+            logger.error('Error', `一時ファイル削除エラー:`, error);
         }
     }
 }

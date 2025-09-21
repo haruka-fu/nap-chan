@@ -9,6 +9,7 @@ import { getConnection } from '../voiceConnectionManager';
 import { ttsQueue } from '../ttsQueue';
 import fs from 'fs';
 import { monitorVoiceConnection } from '../utils/voiceConnectionMonitor';
+import logger from '../utils/logger';
 
 export const name = 'messageCreate';
 export const once = false;
@@ -31,11 +32,11 @@ export async function execute(message: Message) {
 
     try {
         const text = message.content;
-        console.log(`[TTS] 処理開始: "${text}"`);
+        logger.info('TTS', `処理開始: "${text}"`);
 
         const audioQuery = await fetch(`http://voicevox:50021/audio_query?text=${encodeURIComponent(text)}&speaker=${voiceVoxConfig.speaker}`, { method: 'POST' });
         if (!audioQuery.ok) {
-            console.error(`[TTS] Audio query failed: ${audioQuery.status}`);
+            logger.error('TTS', `Audio query failed: ${audioQuery.status}`);
             return;
         }
 
@@ -54,7 +55,7 @@ export async function execute(message: Message) {
         });
 
         if (!audioRes.ok) {
-            console.error(`[Error] Synthesis failed: ${audioRes.status}`);
+            logger.error('Error', `Synthesis failed: ${audioRes.status}`);
             return;
         }
 
@@ -71,6 +72,6 @@ export async function execute(message: Message) {
         }
 
     } catch (error) {
-        console.error(`[Error] 全体エラー:`, error);
+        logger.error('Error', '全体エラー:', String(error));
     }
 }

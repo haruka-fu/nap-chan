@@ -2,6 +2,7 @@ import { SlashCommandBuilder, ChatInputCommandInteraction, GuildMember, VoiceCha
 import { setConnection } from '../voiceConnectionManager';
 import { hasVoiceChannelPermissions } from '../utils/permissions';
 import { connectToVoiceChannel } from '../utils/voiceConnection';
+import logger from '../utils/logger';
 
 export const CommandData = {
     data: new SlashCommandBuilder()
@@ -9,11 +10,11 @@ export const CommandData = {
         .setDescription('なっぷちゃんが VC に参加します'),
     async execute(interaction: ChatInputCommandInteraction) {
         if (!interaction.isCommand()) {
-            console.log("[Error] interaction はスラッシュコマンドではありません。");
+            logger.error('Error', 'interaction はスラッシュコマンドではありません。');
             return;
         }
 
-        console.log("[System] /vcjoin が呼び出されました。");
+        logger.info('System', '/vcjoin が呼び出されました。');
         const member = interaction.member as GuildMember;
         const voiceChannel = member.voice.channel;
 
@@ -22,7 +23,7 @@ export const CommandData = {
             return;
         }
 
-        console.log(`[System] 接続先ボイスチャンネル: ${voiceChannel.name} (ID: ${voiceChannel.id})`);
+        logger.info('System', `接続先ボイスチャンネル: ${voiceChannel.name} (ID: ${voiceChannel.id})`);
 
         // 権限確認
         if (!hasVoiceChannelPermissions(voiceChannel, interaction.guild?.members.me!)) {
@@ -36,12 +37,12 @@ export const CommandData = {
         await interaction.deferReply();
 
         try {
-            console.log(`[System] ボイスチャンネルに接続中...`);
+            logger.info('System', 'ボイスチャンネルに接続中...');
             const connection = await connectToVoiceChannel(voiceChannel);
             setConnection(connection);
             await interaction.editReply({ content: `ボイスチャンネル「${voiceChannel.name}」に参加しました！` });
         } catch (error) {
-            console.error(`[Error] ボイスチャンネルへの接続中にエラーが発生しました:`, error);
+            logger.error('Error', 'ボイスチャンネルへの接続中にエラーが発生しました:', String(error));
             await interaction.editReply({ content: `ボイスチャンネルに参加できませんでした。エラー: ${error}` });
         }
     },

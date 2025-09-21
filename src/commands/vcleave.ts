@@ -5,6 +5,7 @@
 
 import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
 import { getConnection, clearConnection } from '../voiceConnectionManager';
+import logger from '../utils/logger';
 
 export const CommandData = {
     data: new SlashCommandBuilder()
@@ -22,10 +23,10 @@ export const CommandData = {
         try {
             connection.destroy();
             clearConnection();
-            console.log('[System] ボイスチャンネルから退出しました');
+            logger.info('System', 'ボイスチャンネルから退出しました');
             await interaction.reply({ content: 'ボイスチャンネルから退出しました。' });
         } catch (error) {
-            console.error('[Error] ボイスチャンネルからの退出中にエラーが発生しました:', error);
+            logger.error('Error', 'ボイスチャンネルからの退出中にエラーが発生しました:', String(error));
             await interaction.reply({ content: 'ボイスチャンネルからの退出でエラーが発生しました。', ephemeral: true });
         }
     },

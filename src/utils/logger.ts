@@ -22,9 +22,18 @@ const logger = winston.createLogger({
     ]
 });
 
-// 使用例:
-// logger.info('これは情報ログです');
-// logger.error('これはエラーログです');
-// logger.warn('これは警告ログです');
+// Enhanced logging function
+function log(level: 'info' | 'warn' | 'error', context: string, message: string, error?: any) {
+    const formattedMessage = `[${context}] ${message}`;
+    if (error) {
+        logger[level](formattedMessage, error);
+    } else {
+        logger[level](formattedMessage);
+    }
+}
 
-export default logger;
+export default {
+    info: (context: string, message: string) => log('info', context, message),
+    warn: (context: string, message: string) => log('warn', context, message),
+    error: (context: string, message: string, error?: any) => log('error', context, message, error)
+};

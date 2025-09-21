@@ -1,5 +1,6 @@
 import { joinVoiceChannel, entersState, VoiceConnection, VoiceConnectionStatus } from '@discordjs/voice';
 import { VoiceChannel } from 'discord.js';
+import logger from './logger';
 
 /**
  * ボイスチャンネルに接続します。
@@ -31,7 +32,7 @@ export async function connectToVoiceChannel(voiceChannel: VoiceChannel): Promise
     });
 
     connection.on('error', (error) => {
-        console.error('[Error] ボイスチャンネル接続エラー:', error);
+        logger.error('Error', 'ボイスチャンネル接続エラー:', String(error));
     });
 
     return connection;
