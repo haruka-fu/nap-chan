@@ -1,7 +1,7 @@
-import { ChatInputCommandInteraction, Client, Events, Interaction, SelectMenuInteraction } from 'discord.js';
+import { ChatInputCommandInteraction, Interaction, StringSelectMenuInteraction, } from 'discord.js';
 import { client } from "../../main";
 import logger from '../logger';
-import { ButtonInteraction } from 'discord.js';
+import { sendEmbedForPokemonInfo, sendSelectMenuForPokemonInfo } from '../data/data_handler';
 
 export async function interaction_handler(interaction: Interaction) {
     try {
@@ -31,13 +31,27 @@ async function executeCommand(interaction: Interaction) {
 }
 
 async function executeSelectMenu(interaction: Interaction) {
-    const selectMenuInteraction = interaction as SelectMenuInteraction;
+    const selectMenuInteraction = interaction as StringSelectMenuInteraction;
     if (!selectMenuInteraction) return;
-    if (selectMenuInteraction.customId !== "single-select") return;
+    switch (selectMenuInteraction.customId) {
+        case "main-menu":
+            await sendSelectMenuForMainMenu(selectMenuInteraction);
+            break;
+        case "pokemon-info-menu":
+            await sendEmbedForPokemonInfo(selectMenuInteraction);
+            break;
+        default:
+            logger.error("interaction_handler", `Unknown customId: ${selectMenuInteraction.customId}`);
+            return;
+    }
+
+}
+
+async function sendSelectMenuForMainMenu(selectMenuInteraction: StringSelectMenuInteraction) {
     const selectedValues = selectMenuInteraction.values;
     switch (selectedValues[0]) {
-        case 'option_1':
-            await selectMenuInteraction.reply('選択肢 1 が選ばれました！');
+        case 'pokemon_info':
+            await sendSelectMenuForPokemonInfo(selectMenuInteraction);
             break;
         case 'option_2':
             await selectMenuInteraction.reply('選択肢 2 が選ばれました！');

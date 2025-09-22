@@ -17,12 +17,12 @@ export async function execute(message: Message) {
     logger.info('message', message.content);
     if (message.content === "なっぷちゃん") {
         const selectMenu = new StringSelectMenuBuilder()
-            .setCustomId("single-select")
+            .setCustomId("main-menu")
             .setPlaceholder("1つ選んでください")
             .setMinValues(1)
             .setMaxValues(1)
             .addOptions([
-                { label: "選択肢A", value: "option_1" },
+                { label: "ポケモン情報", value: "pokemon_info" },
                 { label: "選択肢B", value: "option_2" },
                 { label: "選択肢C", value: "option_3" },
             ]);
