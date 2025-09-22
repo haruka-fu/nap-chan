@@ -1,4 +1,5 @@
-import { ActionRowBuilder, EmbedBuilder, Interaction, Message, StringSelectMenuBuilder, MessageFlags, StringSelectMenuInteraction } from "discord.js";
+import { ActionRowBuilder, EmbedBuilder, Message, MessageFlags, StringSelectMenuBuilder, StringSelectMenuInteraction } from "discord.js";
+import { pokemonDataList } from "../../main";
 
 export async function sendEmbedForData(message: Message) {
     await message.reply('はい、なっぷちゃんです！');
@@ -18,35 +19,25 @@ export async function sendEmbedForData(message: Message) {
     return;
 }
 
-export async function sendSelectMenuForPokemonInfo(interaction: StringSelectMenuInteraction) {
-    const selectMenu = new StringSelectMenuBuilder()
-        .setCustomId("pokemon-info-menu")
-        .setPlaceholder("どのポケモンの情報を確認しますか？")
-        .setMinValues(1)
-        .setMaxValues(1)
-        .addOptions([
-            { label: "ピカチュウ", value: "025" },
-            { label: "ヒトカゲ", value: "001" },
-            { label: "ゼニガメ", value: "004" },
-        ]);
-    const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectMenu);
-    await interaction.reply({ content: 'ポケモンを選択してください。', components: [row], flags: MessageFlags.Ephemeral });
-    return;
-}
-
 export async function sendEmbedForPokemonInfo(interaction: StringSelectMenuInteraction) {
-    const selectedValues = interaction.values;
-    const embed = new EmbedBuilder()
-        .setTitle('ポケモン情報')
-        .setDescription('選択したポケモンの情報を表示します。')
-        .setColor(0x00AE86)
-        .addFields(
-            { name: '図鑑番号', value: selectedValues[0] },
-            { name: 'ポケモン名', value: 'ピカチュウ' },
-            { name: 'タイプ', value: 'でんき' },
-            { name: 'とくせい', value: 'せいでんき' }
-        )
-        .setFooter({ text: 'ポケモン情報をお楽しみください！' });
-    await interaction.reply({ embeds: [embed] });
+    try {
+        const selectedValues = interaction.values;
+        const selectedPokemon = pokemonDataList.find(pokemon => String(pokemon.id) === selectedValues[0]);
+        if (selectedValues.length === 0) {
+            await interaction.reply({ content: 'ポケモンが選択されていません。', flags: MessageFlags.Ephemeral });
+            return;
+        }
+        const embed = new EmbedBuilder()
+            .setTitle('ポケモン情報')
+            .setDescription('選択したポケモンの情報を表示します。')
+            .setColor(0x00AE86)
+            .addFields(
+                { name: 'ポケモン名', value: selectedPokemon?.name || '不明' },
+            )
+        await interaction.reply({ embeds: [embed] });
+    } catch (error) {
+        console.error("Error in sendEmbedForPokemonInfo:", error);
+        await interaction.reply({ content: 'ポケモン情報の取得中にエラーが発生しました。', flags: MessageFlags.Ephemeral });
+    }
     return;
 }

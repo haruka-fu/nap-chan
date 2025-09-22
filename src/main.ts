@@ -13,6 +13,8 @@ import { Command } from './types';
 import logger from './utils/logger';
 import { loadAndSetupCommands } from './setupCommands';
 import { interaction_handler } from './utils/interaction/interaction_handler';
+import { fetchPokemonList } from './utils/data/get_pokemon_data';
+import { PokemonData } from './model/pokemon_data_list';
 
 // Clientクラスを拡張してcommandsプロパティを追加
 class Client extends DiscordClient {
@@ -41,6 +43,7 @@ export const client = new Client({
 // ロガーの初期化
 logger.info('Main', 'Bot is starting...');
 
+export let pokemonDataList: PokemonData[] = [];
 client.once(Events.ClientReady, async () => {
     if (!client.user) {
         throw new Error('Client user is not defined.');
@@ -48,6 +51,8 @@ client.once(Events.ClientReady, async () => {
     logger.info('System', `${client.user.username} が起動しました`);
 
     await loadAndSetupCommands(client.user.id);
+    pokemonDataList = await fetchPokemonList();
+    console.log("ポケモンwikiデータ取得件数:", pokemonDataList.length);
 });
 
 // イベントの自動登録
