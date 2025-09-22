@@ -17,8 +17,8 @@ const logger = winston.createLogger({
     ),
     transports: [
         new winston.transports.Console(),
-        new winston.transports.File({ filename: `logs/error-${currentDate}.log`, level: 'error' }),
-        new winston.transports.File({ filename: `logs/combined-${currentDate}.log` })
+        new winston.transports.File({ filename: `logs/error-${currentDate}.log`, level: 'warn' }),
+        new winston.transports.File({ filename: `logs/logger-${currentDate}.log` })
     ]
 });
 

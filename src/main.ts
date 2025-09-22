@@ -6,13 +6,13 @@
  */
 
 import 'dotenv/config';
-import { Client as DiscordClient, GatewayIntentBits, Collection, Interaction, ChatInputCommandInteraction, Events } from 'discord.js';
-import { loadCommands } from './setupCommands';
+import { Client as DiscordClient, GatewayIntentBits, Collection, Events } from 'discord.js';
 import { join } from 'path';
 import { readdirSync } from 'fs';
 import { Command } from './types';
-import { setupCommands } from './setupCommands';
 import logger from './utils/logger';
+import { loadAndSetupCommands } from './setupCommands';
+import { interaction_handler } from './utils/interaction/interaction_handler';
 
 // Clientクラスを拡張してcommandsプロパティを追加
 class Client extends DiscordClient {
@@ -29,7 +29,7 @@ if (!token) {
     throw new Error('DISCORD_TOKEN is not set in the environment variables.');
 }
 
-const client = new Client({
+export const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
@@ -41,37 +41,13 @@ const client = new Client({
 // ロガーの初期化
 logger.info('Main', 'Bot is starting...');
 
-// コマンドの自動登録（loadCommandsで一元管理）
-const commands = loadCommands();
-for (const command of commands) {
-    client.commands.set(command.data.name, command);
-}
-
 client.once(Events.ClientReady, async () => {
     if (!client.user) {
         throw new Error('Client user is not defined.');
     }
     logger.info('System', `${client.user.username} が起動しました`);
 
-    // setupCommandsを呼び出してコマンドを登録（既に読み込んだコマンドを渡す）
-    await setupCommands(client.user.id, commands);
-});
-
-client.on(Events.InteractionCreate, async (interaction) => {
-    if (!interaction.isCommand()) return;
-
-    const command = client.commands.get(interaction.commandName);
-    if (!command) {
-        logger.error('Error', `コマンド ${interaction.commandName} が見つかりません。`);
-        return;
-    }
-
-    try {
-        await command.execute(interaction as ChatInputCommandInteraction);
-    } catch (error) {
-        logger.error('Error', `コマンド ${interaction.commandName} の実行中にエラーが発生しました:`, String(error));
-        await interaction.reply({ content: 'コマンドの実行中にエラーが発生しました。', ephemeral: true });
-    }
+    await loadAndSetupCommands(client.user.id);
 });
 
 // イベントの自動登録
@@ -94,6 +70,10 @@ for (const file of eventFiles) {
         logger.error('Error', `イベントファイル ${file} の読み込み中にエラーが発生しました:`, String(error));
     }
 }
+
+client.on(Events.InteractionCreate, async (interaction) => {
+    interaction_handler(interaction);
+});
 
 // ログイン処理
 client.login(token);
