@@ -10,18 +10,42 @@ export async function fetchPokemonList() {
         const html = res.data;
         const $ = cheerio.load(html);
 
-        const result: { id: any; name: any; }[] = [];
+        let results: {
+            id: number;
+            name: string;
+            pageUrl: string;
+            img: string;
+        }[] = [];
 
         // ページ全体のテキストノードを走査して抽出
-        $("#content table tbody tr th span").each((i, row) => {
-            $(row).each((j, cell) => {
+        $("#content table tbody tr").each((i, row) => {
+            let result: {
+                id: number;
+                name: string;
+                pageUrl: string;
+                img: string;
+            } = {
+                id: i++,
+                name: "",
+                pageUrl: "",
+                img: "",
+            };
+            $(row).find("th span").each((j, cell) => {
                 const cellText = $(cell).text().trim();
-                result.push({ id: i, name: cellText });
-                i++;
+                result.name = cellText || "";
             });
+            $(row).find("th a").each((j, cell) => {
+                const pageUrl = "https://wikiwiki.jp/" + $(cell).attr("href");
+                const img = $(cell).find("img").attr("src");
+                if (pageUrl) result.pageUrl = pageUrl || "";
+                if (img) result.img = img;
+            });
+            if (result.name) {
+                results.push(result);
+            }
         });
 
-        return result;
+        return results;
     } catch (err) {
         console.error("取得エラー:", err);
         return [];
