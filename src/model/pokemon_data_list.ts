@@ -2,11 +2,12 @@ import { Colors } from 'discord.js';
 
 export class PokemonData {
     constructor(
-        public id: number,
-        public name: string,
-        public type: string,
-        public pageUrl: string,
-        public img: string
+        public id: number = 0,
+        public name: string = "",
+        public type: string = "",
+        public pageUrl: string = "",
+        public apiUrl: string = "",
+        public img: string = ""
     ) { }
 }
 

@@ -1,6 +1,7 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, MessageFlags } from 'discord.js';
 import { pokemonDataList } from '../main';
 import { TypeColor } from '../model/pokemon_data_list';
+import logger from '../utils/logger';
 
 export const CommandData = {
     data: new SlashCommandBuilder()
@@ -28,11 +29,12 @@ export const CommandData = {
                     { name: 'ポケモン名', value: pokemonName },
                     { name: 'タイプ', value: pokemonData.type || '不明' },
                     { name: '詳細ページ', value: `[詳細はこちら](${pokemonData.pageUrl || 'https://example.com'})` },
+                    { name: '戦績ページ', value: `[詳細はこちら](${pokemonData.apiUrl || 'https://example.com'})` },
                 )
                 .setThumbnail(pokemonData.img || 'https://example.com/default-image.png');
             await interaction.reply({ embeds: [embed] });
         } catch (error) {
-            console.error("Error in sendEmbedForPokemonInfo:", error);
+            logger.error("Command", String(error));
             await interaction.reply({ content: 'ポケモン情報の取得中にエラーが発生しました。', flags: MessageFlags.Ephemeral });
         }
     },

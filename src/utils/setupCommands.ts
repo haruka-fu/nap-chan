@@ -9,9 +9,9 @@
 import { REST, Routes, ChatInputCommandInteraction, Events, Interaction } from 'discord.js';
 import { readdirSync } from 'fs';
 import { join } from 'path';
-import logger from './utils/logger';
-import { Command } from './model/types';
-import { client } from './main';
+import logger from './logger';
+import { Command } from '../model/types';
+import { client } from '../main';
 
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN!);
 
@@ -46,7 +46,7 @@ export async function loadAndSetupCommands(clientId: string): Promise<void> {
 }
 
 function loadCommands(): Command[] {
-    const commandsPath = join(__dirname, './commands');
+    const commandsPath = join(__dirname, '../commands');
     const commandFiles = readdirSync(commandsPath).filter(file => file.endsWith('.ts') || file.endsWith('.js'));
     const commands: Command[] = [];
     logger.info('Command', 'コマンドの読み込みを開始します...');

@@ -1,6 +1,8 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 import { PokemonData } from "../../model/pokemon_data_list";
+import { getPokemonJsonData } from "./get_en_json";
+import logger from "../logger";
 
 const url =
     "https://wikiwiki.jp/poke-unite/::cmd/popout?page=%E4%B8%80%E8%A6%A7&id=%E3%83%9D%E3%82%B1%E3%83%A2%E3%83%B3%E4%B8%80%E8%A6%A7";
@@ -15,7 +17,7 @@ export async function fetchPokemonList() {
 
         // ページ全体のテキストノードを走査して抽出
         $("#content table tbody tr").each((i, row) => {
-            let result = new PokemonData(0, "", "", "", "");
+            let result = new PokemonData();
 
             $(row).find("th span").each((j, cell) => {
                 const cellText = $(cell).text().trim();
@@ -31,6 +33,7 @@ export async function fetchPokemonList() {
             $(row).find("td").eq(1).each((j, cell) => {
                 result.type = $(cell).text().trim() || "";
             });
+            result.apiUrl = `https://uniteapi.dev/jp/pokemon/best-builds-movesets-and-guide-for-${get_english_name(result.name)}`;
             if (result.name) {
                 results.push(result);
             }
@@ -38,7 +41,12 @@ export async function fetchPokemonList() {
 
         return results;
     } catch (err) {
-        console.error("取得エラー:", err);
+        logger.error("wiki取得", String(err));
         return [];
     }
+}
+
+function get_english_name(name: string): string {
+    const englishNames = getPokemonJsonData();
+    return englishNames[name] || "不明";
 }

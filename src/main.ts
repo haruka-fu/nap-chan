@@ -52,7 +52,7 @@ client.once(Events.ClientReady, async () => {
 
     await loadAndSetupCommands(client.user.id);
     pokemonDataList = await fetchPokemonList();
-    console.log("ポケモンwikiデータ取得件数:", pokemonDataList.length);
+    logger.info('System', `ポケモンwikiデータ取得件数: ${pokemonDataList.length}`);
 });
 
 // イベントの自動登録

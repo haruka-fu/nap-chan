@@ -1,6 +1,7 @@
-import { CacheType, ChatInputCommandInteraction, Interaction, StringSelectMenuInteraction, } from 'discord.js';
+import { ChatInputCommandInteraction, Interaction, StringSelectMenuInteraction, } from 'discord.js';
 import { client } from "../../main";
 import logger from '../logger';
+import { sendEmbedForData } from '../data/data_handler';
 
 export async function interaction_handler(interaction: Interaction) {
     try {
@@ -13,7 +14,6 @@ export async function interaction_handler(interaction: Interaction) {
 }
 
 async function executeCommand(interaction: Interaction) {
-    console.log("Command Interaction Created");
     if (!interaction.isCommand()) return;
     const command = client.commands.get(interaction.commandName);
     if (!command) {
@@ -53,7 +53,7 @@ async function sendSelectMenuForMainMenu(selectMenuInteraction: StringSelectMenu
         //     await sendPokemonTypeButton(selectMenuInteraction);
         //     break;
         case 'option_2':
-            await selectMenuInteraction.reply('選択肢 2 が選ばれました！');
+            await sendEmbedForData(selectMenuInteraction);
             break;
         default:
             await selectMenuInteraction.reply('不明な選択肢です。');
