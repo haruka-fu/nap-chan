@@ -1,5 +1,4 @@
 import { ActionRowBuilder, EmbedBuilder, Interaction, Message, StringSelectMenuBuilder, MessageFlags, StringSelectMenuInteraction } from "discord.js";
-import logger from "../logger";
 
 export async function sendEmbedForData(message: Message) {
     await message.reply('はい、なっぷちゃんです！');
