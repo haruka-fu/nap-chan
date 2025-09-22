@@ -1,4 +1,4 @@
-import { getConnection } from "../../voiceConnectionManager";
+import { getConnection } from "../../model/voiceConnectionManager";
 import logger from "../logger";
 import { monitorVoiceConnection } from "../voiceConnectionMonitor";
 import { TTSQueue } from "./ttsQueue";

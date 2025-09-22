@@ -10,7 +10,7 @@ import { REST, Routes, ChatInputCommandInteraction, Events, Interaction } from '
 import { readdirSync } from 'fs';
 import { join } from 'path';
 import logger from './utils/logger';
-import { Command } from './types';
+import { Command } from './model/types';
 import { client } from './main';
 
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN!);

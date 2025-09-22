@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, GuildMember, VoiceChannel } from 'discord.js';
-import { setConnection } from '../voiceConnectionManager';
+import { setConnection } from '../model/voiceConnectionManager';
 import { hasVoiceChannelPermissions } from '../utils/permissions';
 import logger from '../utils/logger';
 import { entersState, joinVoiceChannel, VoiceConnection, VoiceConnectionStatus } from '@discordjs/voice';

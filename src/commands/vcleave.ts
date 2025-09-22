@@ -4,7 +4,7 @@
  */
 
 import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
-import { getConnection, clearConnection } from '../voiceConnectionManager';
+import { getConnection, clearConnection } from '../model/voiceConnectionManager';
 import logger from '../utils/logger';
 
 export const CommandData = {
