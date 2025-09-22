@@ -23,7 +23,7 @@ export async function fetchPokemonList() {
                 result.id = j + 1;
             });
             $(row).find("th a").each((j, cell) => {
-                const pageUrl = "https://wikiwiki.jp/" + $(cell).attr("href");
+                const pageUrl = "https://wikiwiki.jp" + $(cell).attr("href");
                 const img = $(cell).find("img").attr("src");
                 if (pageUrl) result.pageUrl = pageUrl || "";
                 if (img) result.img = img || "";

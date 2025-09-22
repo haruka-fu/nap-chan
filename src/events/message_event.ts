@@ -14,7 +14,6 @@ export const once = false;
 export async function execute(message: Message) {
     if (message.author.bot) return;
 
-    logger.info('message', message.content);
     if (message.content === "なっぷちゃん") {
         const selectMenu = new StringSelectMenuBuilder()
             .setCustomId("main-menu")

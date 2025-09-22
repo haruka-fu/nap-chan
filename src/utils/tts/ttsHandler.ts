@@ -23,6 +23,7 @@ export async function ttsHandler(message: import("discord.js").Message) {
 
     try {
         const text = message.content;
+        logger.info('tts', text);
 
         const audioQuery = await fetch(`http://voicevox:50021/audio_query?text=${encodeURIComponent(text)}&speaker=${voiceVoxConfig.speaker}`, { method: 'POST' });
         const queryJson = await handleFetchError(audioQuery, 'TTS');

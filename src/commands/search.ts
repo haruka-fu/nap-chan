@@ -13,7 +13,7 @@ export const CommandData = {
         ),
     async execute(interaction: ChatInputCommandInteraction) {
         const pokemonName = interaction.options.getString('name', true);
-        const pokemonData = pokemonDataList.find(pokemon => pokemon.name === pokemonName);
+        const pokemonData = pokemonDataList.find(pokemon => pokemon.name.includes(pokemonName));
         if (!pokemonData) {
             await interaction.reply({ content: `ポケモン「${pokemonName}」が見つかりませんでした。`, flags: MessageFlags.Ephemeral });
             return;
@@ -22,14 +22,14 @@ export const CommandData = {
         try {
             const embed = new EmbedBuilder()
                 .setTitle('ポケモン情報')
-                .setDescription('選択したポケモンの情報を表示します。')
+                .setDescription(`選択したポケモンの情報を表示します。`)
                 .setColor(TypeColor[pokemonData.type])
                 .addFields(
                     { name: 'ポケモン名', value: pokemonName },
                     { name: 'タイプ', value: pokemonData.type || '不明' },
                     { name: '詳細ページ', value: `[詳細はこちら](${pokemonData.pageUrl || 'https://example.com'})` },
                 )
-                .setImage(pokemonData.img || 'https://example.com/default-image.png');
+                .setThumbnail(pokemonData.img || 'https://example.com/default-image.png');
             await interaction.reply({ embeds: [embed] });
         } catch (error) {
             console.error("Error in sendEmbedForPokemonInfo:", error);
