@@ -6,7 +6,7 @@
  */
 
 import 'dotenv/config';
-import { Client as DiscordClient, GatewayIntentBits, Collection, Interaction, ChatInputCommandInteraction } from 'discord.js';
+import { Client as DiscordClient, GatewayIntentBits, Collection, Interaction, ChatInputCommandInteraction, Events } from 'discord.js';
 import { loadCommands } from './setupCommands';
 import { join } from 'path';
 import { readdirSync } from 'fs';
@@ -47,7 +47,7 @@ for (const command of commands) {
     client.commands.set(command.data.name, command);
 }
 
-client.once('clientReady', async () => {
+client.once(Events.ClientReady, async () => {
     if (!client.user) {
         throw new Error('Client user is not defined.');
     }
@@ -57,7 +57,7 @@ client.once('clientReady', async () => {
     await setupCommands(client.user.id, commands);
 });
 
-client.on('interactionCreate', async (interaction) => {
+client.on(Events.InteractionCreate, async (interaction) => {
     if (!interaction.isCommand()) return;
 
     const command = client.commands.get(interaction.commandName);
