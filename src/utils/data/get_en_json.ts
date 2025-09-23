@@ -13,7 +13,7 @@ export function getPokemonJsonData(): Record<string, string> {
         const englishNames = jsonArray.reduce((acc: Record<string, string>, item: { japanese_name: string; english_name: string }) => {
             if (typeof item.japanese_name === 'string' && typeof item.english_name === 'string') {
                 const normalizedKey = item.japanese_name.toLowerCase().replace(/\s+/g, '');
-                const normalizedValue = item.english_name.toLowerCase().replace(/\s+/g, '');
+                const normalizedValue = item.english_name.toLowerCase().replace(/\s+/g, '').replace(/\./g, '');
                 acc[normalizedKey] = normalizedValue;
             } else {
             }

@@ -4,16 +4,16 @@
         "english_name": "Absol"
     },
     {
+        "japanese_name": "アマージョ",
+        "english_name": "Tsareena"
+    },
+    {
         "japanese_name": "アローラキュウコン",
         "english_name": "Alolan Ninetales"
     },
     {
         "japanese_name": "アローラライチュウ",
         "english_name": "Alolan Raichu"
-    },
-    {
-        "japanese_name": "アマージョ",
-        "english_name": "Tsareena"
     },
     {
         "japanese_name": "イワパレス",
@@ -32,12 +32,12 @@
         "english_name": "Cramorant"
     },
     {
-        "japanese_name": "エーフィ",
-        "english_name": "Espeon"
-    },
-    {
         "japanese_name": "エースバーン",
         "english_name": "Cinderace"
+    },
+    {
+        "japanese_name": "エーフィ",
+        "english_name": "Espeon"
     },
     {
         "japanese_name": "エンペルト",
@@ -48,36 +48,52 @@
         "english_name": "Trevenant"
     },
     {
-        "japanese_name": "カイリュー",
-        "english_name": "Dragonite"
-    },
-    {
         "japanese_name": "カイリキー",
         "english_name": "Machamp"
+    },
+    {
+        "japanese_name": "カイリュー",
+        "english_name": "Dragonite"
     },
     {
         "japanese_name": "カビゴン",
         "english_name": "Snorlax"
     },
     {
-        "japanese_name": "カメックス",
-        "english_name": "Blastoise"
-    },
-    {
         "japanese_name": "ガブリアス",
         "english_name": "Garchomp"
+    },
+    {
+        "japanese_name": "カメックス",
+        "english_name": "Blastoise"
     },
     {
         "japanese_name": "ガラルギャロップ",
         "english_name": "Galarian Rapidash"
     },
     {
+        "japanese_name": "ギャラドス",
+        "english_name": "Gyarados"
+    },
+    {
         "japanese_name": "キュワワー",
         "english_name": "Comfey"
     },
     {
-        "japanese_name": "キリキザン",
-        "english_name": "Bisharp"
+        "japanese_name": "ギルガルド",
+        "english_name": "Aegislash"
+    },
+    {
+        "japanese_name": "グレイシア",
+        "english_name": "Glaceon"
+    },
+    {
+        "japanese_name": "グレンアルマ",
+        "english_name": "Glimmora"
+    },
+    {
+        "japanese_name": "ゲッコウガ",
+        "english_name": "Greninja"
     },
     {
         "japanese_name": "ゲンガー",
@@ -88,12 +104,12 @@
         "english_name": "Psyduck"
     },
     {
-        "japanese_name": "コノヨザル",
-        "english_name": "Annihilape"
-    },
-    {
         "japanese_name": "サーナイト",
         "english_name": "Gardevoir"
+    },
+    {
+        "japanese_name": "ザシアン",
+        "english_name": "Zacian"
     },
     {
         "japanese_name": "シャンデラ",
@@ -116,32 +132,32 @@
         "english_name": "Zeraora"
     },
     {
-        "japanese_name": "ゾロアーク",
-        "english_name": "Zoroark"
+        "japanese_name": "ソウブレイズ",
+        "english_name": "Skeledirge"
     },
     {
-        "japanese_name": "ソルガレオ",
-        "english_name": "Solgaleo"
+        "japanese_name": "ゾロアーク",
+        "english_name": "Zoroark"
     },
     {
         "japanese_name": "ダグトリオ",
         "english_name": "Dugtrio"
     },
     {
-        "japanese_name": "ダークライ",
-        "english_name": "Darkrai"
+        "japanese_name": "タイレーツ",
+        "english_name": "Kingler"
     },
     {
         "japanese_name": "デカヌチャン",
         "english_name": "Tinkaton"
     },
     {
-        "japanese_name": "ドードリオ",
-        "english_name": "Dodrio"
+        "japanese_name": "ドラパルト",
+        "english_name": "Dragapult"
     },
     {
-        "japanese_name": "ヌオー",
-        "english_name": "Quagsire"
+        "japanese_name": "ドードリオ",
+        "english_name": "Dodrio"
     },
     {
         "japanese_name": "ヌメルゴン",
@@ -152,12 +168,16 @@
         "english_name": "Sylveon"
     },
     {
-        "japanese_name": "ハガネール",
-        "english_name": "Steelix"
+        "japanese_name": "ヌメルゴン",
+        "english_name": "Goodra"
     },
     {
-        "japanese_name": "ハクリュー",
-        "english_name": "Dragonair"
+        "japanese_name": "パーモット",
+        "english_name": "Corviknight"
+    },
+    {
+        "japanese_name": "バシャーモ",
+        "english_name": "Blaziken"
     },
     {
         "japanese_name": "ハッサム",
@@ -176,10 +196,6 @@
         "english_name": "Tyranitar"
     },
     {
-        "japanese_name": "バシャーモ",
-        "english_name": "Blaziken"
-    },
-    {
         "japanese_name": "ピカチュウ",
         "english_name": "Pikachu"
     },
@@ -192,24 +208,28 @@
         "english_name": "Talonflame"
     },
     {
-        "japanese_name": "フシギバナ",
-        "english_name": "Venusaur"
-    },
-    {
         "japanese_name": "フーパ",
         "english_name": "Hoopa"
-    },
-    {
-        "japanese_name": "ブラッキー",
-        "english_name": "Umbreon"
     },
     {
         "japanese_name": "プクリン",
         "english_name": "Wigglytuff"
     },
     {
+        "japanese_name": "フシギバナ",
+        "english_name": "Venusaur"
+    },
+    {
+        "japanese_name": "ブラッキー",
+        "english_name": "Umbreon"
+    },
+    {
         "japanese_name": "ホウオウ",
         "english_name": "Ho-Oh"
+    },
+    {
+        "japanese_name": "マスカーニャ",
+        "english_name": "Meowscarada"
     },
     {
         "japanese_name": "マッシブーン",
@@ -220,16 +240,16 @@
         "english_name": "Delphox"
     },
     {
+        "japanese_name": "マホイップ",
+        "english_name": "Alcremie"
+    },
+    {
         "japanese_name": "マリルリ",
         "english_name": "Azumarill"
     },
     {
         "japanese_name": "マンムー",
         "english_name": "Mamoswine"
-    },
-    {
-        "japanese_name": "ミライドン",
-        "english_name": "Miraidon"
     },
     {
         "japanese_name": "ミミッキュ",
@@ -240,16 +260,16 @@
         "english_name": "Mew"
     },
     {
-        "japanese_name": "ミロカロス",
-        "english_name": "Milotic"
-    },
-    {
         "japanese_name": "メガミュウツーX",
         "english_name": "Mega Mewtwo X"
     },
     {
         "japanese_name": "メガミュウツーY",
         "english_name": "Mega Mewtwo Y"
+    },
+    {
+        "japanese_name": "ミライドン",
+        "english_name": "Miraidon"
     },
     {
         "japanese_name": "メタグロス",
@@ -280,20 +300,16 @@
         "english_name": "Lapras"
     },
     {
+        "japanese_name": "リーフィア",
+        "english_name": "Leafeon"
+    },
+    {
         "japanese_name": "リザードン",
         "english_name": "Charizard"
     },
     {
         "japanese_name": "ルカリオ",
         "english_name": "Lucario"
-    },
-    {
-        "japanese_name": "ルナアーラ",
-        "english_name": "Lunala"
-    },
-    {
-        "japanese_name": "リーフィア",
-        "english_name": "Leafeon"
     },
     {
         "japanese_name": "ワタシラガ",
